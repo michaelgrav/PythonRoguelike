@@ -14,7 +14,7 @@ def main() -> None:
     map_height = 45
 
     room_max_size = 10
-    room_max_size = 6
+    room_min_size = 6
     # Max rooms a floor can have
     max_rooms = 30
 
@@ -31,7 +31,14 @@ def main() -> None:
     # Array of entities
     entities = {npc, player}
 
-    game_map = generate_dungeon(map_width, map_height)
+    game_map = generate_dungeon(
+        max_rooms=max_rooms,
+        room_min_size=room_min_size,
+        room_max_size=room_max_size,
+        map_width=map_width,
+        map_height=map_height,
+        player=player
+    )
 
     engine = Engine(entities=entities, event_handler=event_handler, game_map=game_map, player=player)
 
