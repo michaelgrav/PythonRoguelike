@@ -1,6 +1,8 @@
 import tcod
 
-from actions import EscapeAction, MovementAction
+from engine import Engine
+from entity import Entity
+from game_map import GameMap
 from input_handlers import EventHandler
 
 
@@ -8,15 +10,25 @@ def main() -> None:
     screen_width = 80
     screen_height = 50
 
-    player_x = int(screen_width / 2)
-    player_y = int(screen_height / 2)
+    map_width = 80
+    map_height = 45
 
+    # Loads the file set
     tileset = tcod.tileset.load_tilesheet(
         "dejavu10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
 
     # instance of our EventHandler class
     event_handler = EventHandler()
+
+    player = Entity(int(screen_width / 2), int(screen_height / 2), "@", (255, 255, 255))
+    npc = Entity(int(screen_width / 2 - 5), int(screen_height / 2), "@", (255, 255, 0))
+    # Array of entities
+    entities = {npc, player}
+
+    game_map = GameMap(map_width, map_height)
+
+    engine = Engine(entities=entities, event_handler=event_handler, game_map=game_map, player=player)
 
     # Creates the screen
     with tcod.context.new_terminal(
@@ -30,28 +42,11 @@ def main() -> None:
         root_console = tcod.Console(screen_width, screen_height, order="F")
         # Game loop
         while True:
-            # Prints our character to the screen
-            root_console.print(x=player_x, y=player_y, string="@")
+            engine.render(console=root_console, context=context)
 
-            # Updates the screen
-            context.present(root_console)
+            events = tcod.event.wait()
 
-            # so we dont have the @ smear across the screen
-            root_console.clear()
-
-            # Closes the windows if the x button is pressed
-            for event in tcod.event.wait():
-                action = event_handler.dispatch(event)
-
-                if action is None:
-                    continue
-
-                if isinstance(action, MovementAction):
-                    player_x += action.dx
-                    player_y += action.dy
-
-                elif isinstance(action, EscapeAction):
-                    raise SystemExit
+            engine.handle_events(events)
 
 
 if __name__ == "__main__":
