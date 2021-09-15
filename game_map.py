@@ -9,9 +9,7 @@ class GameMap:
         self.width, self.height = width, height
 
         # Create a 2d array, filled with the same values. It Basically fills self.tiles with floor tiles
-        self.tiles = np.full((width, height), fill_value=tile_types.floor, order="F")
-
-        self.tiles[30:33, 22] = tile_types.wall
+        self.tiles = np.full((width, height), fill_value=tile_types.wall, order="F")
 
     # Makes sure the player doesn't leave the map
     def in_bounds(self, x: int, y: int) -> bool:
