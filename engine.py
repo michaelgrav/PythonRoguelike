@@ -1,4 +1,4 @@
-from typing import Set, Iterable, Any
+from typing import Iterable, Any
 
 from tcod.context import Context
 from tcod.console import Console
@@ -15,8 +15,7 @@ class Engine:
         event_handler handles events
         player is the player entity
     """
-    def __init__(self, entities: Set[Entity], event_handler, game_map: GameMap, player: Entity):
-        self.entities = entities
+    def __init__(self, event_handler: EventHandler, game_map: GameMap, player: Entity):
         self.event_handler = event_handler
         self.game_map = game_map
         self.player = player
@@ -54,11 +53,6 @@ class Engine:
     # Handles drawing to the screen, iterate though self.entities and print them
     def render(self, console: Console, context: Context):
         self.game_map.render(console)
-
-        for entity in self.entities:
-            # Only print enemies that are in FOV
-            if self.game_map.visible[entity.x, entity.y]:
-                console.print(entity.x, entity.y, entity.char, fg=entity.color)
 
         context.present(console)
 
