@@ -15,7 +15,7 @@ class Action:
     @property
     def engine(self) -> Engine:
         """Return the engine this action belongs too"""
-        return self.entity.gamemap.entity
+        return self.entity.gamemap.engine
 
     def perform(self) -> None:
         """Perform this action with the objects needed to determine its scope
@@ -53,7 +53,7 @@ class ActionWithDirection(Action):
     @property
     def blocking_entity(self) -> Optional[Entity]:
         """Return the blocking entity at this actions destination"""
-        return self.entity.game_map.get_blocking_entity_at_location(*self.dest_xy)
+        return self.engine.game_map.get_blocking_entity_at_location(*self.dest_xy)
 
     def perform(self) -> None:
         raise NotImplementedError()

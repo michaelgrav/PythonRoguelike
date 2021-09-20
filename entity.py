@@ -17,15 +17,15 @@ class Entity:
     gamemap: GameMap
 
     def __init__(
-        self,
-        gamemap: Optional[GameMap] = None,
-        x: int = 0,
-        y: int = 0,
-        char: str = "?",
-        color: Tuple[int, int, int] = (255, 255, 255),
-        name: str = "<Unnamed>",
-        # Tells us if the Entity can be moved or not
-        blocks_movement: bool = False,
+            self,
+            gamemap: Optional[GameMap] = None,
+            x: int = 0,
+            y: int = 0,
+            char: str = "?",
+            color: Tuple[int, int, int] = (255, 255, 255),
+            name: str = "<Unnamed>",
+            # Tells us if the Entity can be moved or not
+            blocks_movement: bool = False,
     ):
         self.x = x
         self.y = y
@@ -58,9 +58,7 @@ class Entity:
             self.gamemap = gamemap
             gamemap.entities.add(self)
 
-    """
     def move(self, dx: int, dy: int) -> None:
         # Move the entity by a given amount
         self.x += dx
-        self.y += dy   
-    """
+        self.y += dy
