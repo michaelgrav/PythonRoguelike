@@ -8,25 +8,38 @@ from tcod.console import Console
 import tile_types
 
 if TYPE_CHECKING:
+    from engine import Engine
     from entity import Entity
 
 
 class GameMap:
-    def __init__(self, width: int, height: int, entities: Iterable[Entity] = ()):
+    def __init__(
+            self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()
+    ):
+        self.engine = engine
         self.width, self.height = width, height
         self.entities = set(entities)
 
         # Create a 2d array, filled with the same values. It Basically fills self.tiles with floor tiles
         self.tiles = np.full((width, height), fill_value=tile_types.wall, order="F")
 
-        # Tiles the player can currently see
-        self.visible = np.full((width, height), fill_value=False, order="F")
-        # Tiles the player has seen before
-        self.explored = np.full((width, height), fill_value=False, order="F")
+        self.visible = np.full(
+            (width, height), fill_value=False, order="F"
+        )  # Tiles the player can currently see
 
-    def get_blocking_entity_at_location(self, location_x: int, location_y: int) -> Optional[Entity]:
+        self.explored = np.full(
+            (width, height), fill_value=False, order="F"
+        )  # Tiles the player has seen before
+
+    def get_blocking_entity_at_location(
+            self, location_x: int, location_y: int
+    ) -> Optional[Entity]:
         for entity in self.entities:
-            if entity.blocks_movement and entity.x == location_x and entity.y == location_y:
+            if (
+                entity.blocks_movement
+                and entity.x == location_x
+                and entity.y == location_y
+            ):
                 # If entity is found that blocks movement and occupies location_x and location_y, it returns that Entity
                 return entity
 
@@ -45,7 +58,7 @@ class GameMap:
         If it isn't, but it's in the "explored" array, then draw it with the "dark" colors
         Otherwise, the default is "SHROUD"
         """
-        console.tiles_rgb[0:self.width, 0:self.height] = np.select(
+        console.tiles_rgb[0 : self.width, 0 : self.height] = np.select(
             # This line will check if the tile is either visible, then explored
             condlist=[self.visible, self.explored],
             # If visible, use "light", if explored use "dark"
