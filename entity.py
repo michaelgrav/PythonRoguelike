@@ -76,7 +76,7 @@ class Actor(Entity):
             color: Tuple[int, int, int] = (255, 255, 255),
             name: str = "<Unnamed>",
             ai_cls: Type[BaseAI],
-            fighter: Fighter,
+            fighter: Fighter
     ):
         super().__init__(
             x=x,

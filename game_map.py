@@ -32,7 +32,6 @@ class GameMap:
             (width, height), fill_value=False, order="F"
         )  # Tiles the player has seen before
 
-
     @property
     def actors(self) -> Iterator[Actor]:
         """Iterate over this maps living actors"""
@@ -47,9 +46,9 @@ class GameMap:
     ) -> Optional[Entity]:
         for entity in self.entities:
             if (
-                entity.blocks_movement
-                and entity.x == location_x
-                and entity.y == location_y
+                    entity.blocks_movement
+                    and entity.x == location_x
+                    and entity.y == location_y
             ):
                 # If entity is found that blocks movement and occupies location_x and location_y, it returns that Entity
                 return entity
@@ -76,7 +75,7 @@ class GameMap:
         If it isn't, but it's in the "explored" array, then draw it with the "dark" colors
         Otherwise, the default is "SHROUD"
         """
-        console.tiles_rgb[0 : self.width, 0 : self.height] = np.select(
+        console.tiles_rgb[0: self.width, 0: self.height] = np.select(
             # This line will check if the tile is either visible, then explored
             condlist=[self.visible, self.explored],
             # If visible, use "light", if explored use "dark"
