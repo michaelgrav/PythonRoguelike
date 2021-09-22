@@ -3,6 +3,8 @@ from __future__ import annotations
 import copy
 from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING
 
+from render_order import RenderOrder
+
 if TYPE_CHECKING:
     from components.ai import BaseAI
     from components.fighter import Fighter
@@ -15,7 +17,6 @@ class Entity:
     """
     Generic object to represent players, enemies, items...
     """
-
     gamemap: GameMap
 
     def __init__(
@@ -28,6 +29,7 @@ class Entity:
             name: str = "<Unnamed>",
             # Tells us if the Entity can be moved or not
             blocks_movement: bool = False,
+            render_order: RenderOrder = RenderOrder.CORPSE
     ):
         self.x = x
         self.y = y
@@ -36,6 +38,7 @@ class Entity:
         self.color = color
         self.name = name
         self.blocks_movement = blocks_movement
+        self.render_order = render_order
         if gamemap:
             # If gamemap isn't provided now then it will be set later
             self.gamemap = gamemap
@@ -85,6 +88,7 @@ class Actor(Entity):
             color=color,
             name=name,
             blocks_movement=True,  # All the actors will block movement
+            render_order=RenderOrder.ACTOR,
         )
 
         self.ai: Optional[BaseAI] = ai_cls(self)
