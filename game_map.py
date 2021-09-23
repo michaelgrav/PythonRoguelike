@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional, TYPE_CHECKING
+from typing import Iterable, Iterator, Optional, TYPE_CHECKING
 
 import numpy as np  # type: ignore
 from tcod.console import Console
 
+from entity import Actor
 import tile_types
 
 if TYPE_CHECKING:
@@ -31,17 +32,33 @@ class GameMap:
             (width, height), fill_value=False, order="F"
         )  # Tiles the player has seen before
 
+    @property
+    def actors(self) -> Iterator[Actor]:
+        """Iterate over this maps living actors"""
+        yield from (
+            entity
+            for entity in self.entities
+            if isinstance(entity, Actor) and entity.is_alive
+        )
+
     def get_blocking_entity_at_location(
             self, location_x: int, location_y: int
     ) -> Optional[Entity]:
         for entity in self.entities:
             if (
-                entity.blocks_movement
-                and entity.x == location_x
-                and entity.y == location_y
+                    entity.blocks_movement
+                    and entity.x == location_x
+                    and entity.y == location_y
             ):
                 # If entity is found that blocks movement and occupies location_x and location_y, it returns that Entity
                 return entity
+
+        return None
+
+    def ger_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
+        for actor in self.actors:
+            if actor.x == x and actor.y == y:
+                return actor
 
         return None
 
@@ -58,7 +75,7 @@ class GameMap:
         If it isn't, but it's in the "explored" array, then draw it with the "dark" colors
         Otherwise, the default is "SHROUD"
         """
-        console.tiles_rgb[0 : self.width, 0 : self.height] = np.select(
+        console.tiles_rgb[0: self.width, 0: self.height] = np.select(
             # This line will check if the tile is either visible, then explored
             condlist=[self.visible, self.explored],
             # If visible, use "light", if explored use "dark"
@@ -67,7 +84,14 @@ class GameMap:
             default=tile_types.SHROUD
         )
 
-        for entity in self.entities:
+        # Tells sorted to sort by the value of render_order
+        entities_sorted_for_rendering = sorted(
+            self.entities, key=lambda x: x.render_order.value
+        )
+
+        for entity in entities_sorted_for_rendering:
             # Only print enemies that are in FOV
             if self.visible[entity.x, entity.y]:
-                console.print(x=entity.x, y=entity.y, string=entity.char, fg=entity.color)
+                console.print(
+                    x=entity.x, y=entity.y, string=entity.char, fg=entity.color
+                )
