@@ -6,11 +6,14 @@ import tcod
 import color
 
 
+# Used to save and display messages in our log
 class Message:
     def __init__(self, text: str, fg: Tuple[int, int, int]):
-        self.plain_text = text
-        self.fg = fg
-        self.count = 1
+        self.plain_text = text  # The actual message text.
+        self.fg = fg  # The “foreground” color of the message
+        self.count = 1  # This is used to display something like “The Orc attacks (x3).” Rather than crowding our
+        # message log with the same message over and over, we can “stack” the messages by increasing a message’s
+        # count. This only happens when the same message appears several times in a row.
 
     @property
     def full_text(self) -> str:
@@ -22,7 +25,7 @@ class Message:
 
 class MessageLog:
     def __init__(self) -> None:
-        self.messages: List[Message] = []
+        self.messages: List[Message] = []  # Keeps a list of the Messages received
 
     def add_message(
             self, text: str, fg: Tuple[int, int, int] = color.white, *, stack: bool = True,
