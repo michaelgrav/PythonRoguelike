@@ -59,9 +59,11 @@ def main() -> None:
         root_console = tcod.Console(screen_width, screen_height, order="F")
         # Game loop
         while True:
-            engine.render(console=root_console, context=context)
+            root_console.clear()
+            engine.event_handler.on_render(console=root_console)
+            context.present(root_console)
 
-            engine.event_handler.handle_events()
+            engine.event_handler.handle_events(context)
 
 
 if __name__ == "__main__":
