@@ -89,12 +89,12 @@ class MeleeAction(ActionWithDirection):
         # If damage was greater than zero, subtract it from the defender's hp
         if damage > 0:
             self.engine.message_log.add_message(
-                print(f"{attack_desc} for {damage} hit points", attack_color)
+                f"{attack_desc} for {damage} hit points", attack_color
             )
             target.fighter.hp -= damage
         else:
             self.engine.message_log.add_message(
-                print(f"{attack_desc} but does no damage", attack_color)
+                f"{attack_desc} but does no damage", attack_color
             )
 
 
