@@ -13,6 +13,7 @@ Controls
  - Down arrow = move down
  - Left arrow = move left
  - Right arrow = move right
+ - V = View message history
 
 Tutorial Used:
 https://rogueliketutorials.com/tutorials/tcod/v2/

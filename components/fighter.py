@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import color
 from components.base_component import BaseComponent
 from input_handlers import GameOverEventHandler
 from render_order import RenderOrder
@@ -33,9 +34,11 @@ class Fighter(BaseComponent):
         # Print out a message indicating the death of the enemy
         if self.engine.player is self.entity:
             death_message = "You died!"
+            death_message_color = color.player_die
             self.engine.event_handler = GameOverEventHandler(self.engine)
         else:
             death_message = f"{self.entity.name} is dead!"
+            death_message_color = color.enemy_die
 
         # Set the entity’s character to “%” (most roguelikes use this for corpses)
         self.entity.char = "%"
@@ -55,4 +58,4 @@ class Fighter(BaseComponent):
         # Update the render order to reflect a dead body
         self.entity.render_order = RenderOrder.CORPSE
 
-        print(death_message)
+        self.engine.message_log.add_message(death_message, death_message_color)
