@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Fighter(BaseComponent):
-    entity: Actor
+    parent: Actor
 
     def __init__(self, hp: int, defense: int, power: int):
         self.max_hp = hp  # Hit Points
@@ -27,35 +27,35 @@ class Fighter(BaseComponent):
     @hp.setter
     def hp(self, value: int) -> None:
         self._hp = max(0, min(value, self.max_hp))  # Hp will never be less than 0, and can't go higher than max
-        if self._hp == 0 and self.entity.ai:  # if hp is 0, kill the entity
+        if self._hp == 0 and self.parent.ai:  # if hp is 0, kill the entity
             self.die()
 
     def die(self) -> None:
         # Print out a message indicating the death of the enemy
-        if self.engine.player is self.entity:
+        if self.engine.player is self.parent:
             death_message = "You died!"
             death_message_color = color.player_die
             self.engine.event_handler = GameOverEventHandler(self.engine)
         else:
-            death_message = f"{self.entity.name} is dead!"
+            death_message = f"{self.parent.name} is dead!"
             death_message_color = color.enemy_die
 
         # Set the entity’s character to “%” (most roguelikes use this for corpses)
-        self.entity.char = "%"
+        self.parent.char = "%"
 
         # Set its color to red
-        self.entity.color = (191, 0, 0)
+        self.parent.color = (191, 0, 0)
 
         # Set blocks_movement to False, so that the entities can walk over the corpse
-        self.entity.blocks_movement = False
+        self.parent.blocks_movement = False
 
         # Remove the AI from the entity, so it’ll be marked as dead and won’t take any more turns
-        self.entity.ai = None
+        self.parent.ai = None
 
         # Change the name to this
-        self.entity.name = f"remains of {self.entity.name}"
+        self.parent.name = f"remains of {self.parent.name}"
 
         # Update the render order to reflect a dead body
-        self.entity.render_order = RenderOrder.CORPSE
+        self.parent.render_order = RenderOrder.CORPSE
 
         self.engine.message_log.add_message(death_message, death_message_color)
