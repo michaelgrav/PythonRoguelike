@@ -1,5 +1,5 @@
 # PythonRoguelike
-![Screenshot 2021-09-19 205822](https://user-images.githubusercontent.com/29133471/133950896-7127e9d3-01f0-4845-a0b2-48ae5d9e2693.png)
+![image](https://user-images.githubusercontent.com/29133471/134974236-8c926367-cb80-4a41-aa19-04fedae5bc66.png)
 
 This is a simple Roguelike game written with libtcod in python
 
