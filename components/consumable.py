@@ -9,3 +9,7 @@ from exceptions import Impossible
 
 if TYPE_CHECKING:
     from entity import Actor, Item
+
+
+class Consumable(BaseComponent):
+    parent: Item
