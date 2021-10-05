@@ -19,5 +19,5 @@ Run Project Online:
 https://replit.com/@mykl/PythonRoguelike?v=1
 
 
-Tutorial Used:
+Tutorial Referenced:
 https://rogueliketutorials.com/tutorials/tcod/v2/
